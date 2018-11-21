@@ -177,7 +177,11 @@ bool gatewayTransportInit(void)
 	Ethernet.begin(_ethernetGatewayMAC, _ethernetGatewayIP);
 #else /* Else part of MY_IP_GATEWAY_ADDRESS && MY_IP_SUBNET_ADDRESS */
 	// Get IP address from DHCP
+#if defined(MY_HOSTNAME)
+	if (!Ethernet.begin(_ethernetGatewayMAC, MY_HOSTNAME)) {
+#else
 	if (!Ethernet.begin(_ethernetGatewayMAC)) {
+#endif
 		GATEWAY_DEBUG(PSTR("!GWT:TIN:DHCP FAIL\n"));
 		_w5100_spi_en(false);
 		return false;
